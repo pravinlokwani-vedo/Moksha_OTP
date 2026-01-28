@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div id="recaptcha-container"></div>
+    <script>
+        const firebaseConfig = {
+            apiKey: "PASTE_YOUR_KEY_HERE",
+            authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "PASTE_YOUR_PROJECT_ID",
+            storageBucket: "PASTE_YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "PASTE_SENDER_ID",
+            appId: "PASTE_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        function sendOTP(number) {
+            const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
+            firebase.auth().signInWithPhoneNumber("+" + number, appVerifier)
+                .then((confirmationResult) => {
+                    window.confirmationResult = confirmationResult;
+                    alert("OTP_SENT");
+                }).catch((error) => { alert("Error: " + error.message); });
+        }
+
+        function verifyOTP(code) {
+            confirmationResult.confirm(code).then(() => {
+                alert("VERIFIED_SUCCESS");
+            }).catch(() => { alert("INVALID_CODE"); });
+        }
+    </script>
+</body>
+</html>
